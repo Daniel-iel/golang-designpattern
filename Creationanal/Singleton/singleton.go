@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 type MyLogger struct {
 	loglevel int
@@ -16,11 +19,14 @@ func (l *MyLogger) SetlogLevel(level int) {
 
 var logger *MyLogger
 
+var once sync.Once
+
 func getLoggerInstance() *MyLogger {
-	if logger == nil {
+	once.Do(func() {
 		fmt.Println("Creating Logger Instance")
 		logger = &MyLogger{}
-	}
+	})
+
 	fmt.Println("Returning Logger Instance")
 	return logger
 }
